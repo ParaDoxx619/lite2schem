@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+        background-color: #333333;
+      }
+
+      .box {
+        background-color: #555555;
+        border: 4px solid #222222;
+        padding: 20px;
+        text-align: center;
+        width: 400px;
+      }
+
+      h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: white;
+      }
+
+      input[type="file"] {
+        font-size: 16px;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: #777777;
+        border: 2px solid #222222;
+        color: white;
+      }
+
+      button {
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        background-color: #0099ff;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 20px;
+        color: white;
+      }
+
+      #output {
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <h2>Convert .litematic to .schem</h2>
+      <input type="file" id="litematic-file" />
+      <br />
+      <br />
+      <button id="convert-button">Convert</button>
+      <br />
+      <br />
+      <div id="output"></div>
+    </div>
+
+    <script>
+          const convertButton = document.getElementById("convert-button");
+      const litematicFileInput = document.getElementById("litematic-file");
+      const output = document.getElementById("output");
+
+      convertButton.addEventListener("click", () => {
+        // Check if a .litematic file was selected
+        if (!litematicFileInput.files[0]) {
+          output.innerHTML = "Please select a .litematic file.";
+          return;
+        }
+
+        // Get the contents of the .litematic file
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          // Parse the .litematic data and convert it to .schem data
+          const litematicData = event.target.result;
+          const schematicData = parseLitematicData(litematicData);
+
+          // Download the .schem file with the same name as the input file
+          const fileName = litematicFileInput.files[0].name.replace(".litematic", ".schem");
+          downloadFile(schematicData, fileName, "text/plain");
+
+          output.innerHTML = `Conversion completed. File downloaded as '${fileName}'.`;
+        };
+        reader.readAsText(litematicFileInput.files[0]);
+      });
+
+      function parseLitematicData(litematicData) {
+        // Implementation to parse the litematic data and convert it to schematic data
+      }
+
+      function downloadFile(data, fileName, contentType) {
+        // Create a link and simulate a click on it to initiate the download
+        const a = document.createElement("a");
+        const blob = new Blob([data], { type: contentType });
+        a.href = URL.createObjectURL(blob);
+        a.download = fileName;
+        a.click();
+      }
+    </script>
+  </body>
+</html>
